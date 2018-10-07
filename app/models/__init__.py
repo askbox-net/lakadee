@@ -18,3 +18,9 @@ class User(db.Model):
 
     def __repr__(self):
         return '<Users %r>' % self.first_name
+
+
+class Item(db.Model):
+    __tablename__ = 'items'
+
+    id = db.Column(db.Integer, primary_key=True)

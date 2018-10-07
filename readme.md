@@ -20,5 +20,3 @@ python3 migrations.py
 python3 app.py
 ```
 
-https://it-engineer-lab.com/archives/1183
-
