@@ -1,0 +1,97 @@
+{% from 'helpers/_forms.html' import generate_fields with context %}
+<!DOCTYPE html>
+<html lang="la">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{% block title %}{% endblock %} | ລາຄາດີ </title>
+	<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+  </head>
+  <body>
+	  <!--
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		  </button>
+		  <a class="navbar-brand" href="/">Contact Manager</a>
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<form action="{{ url_for('search') }}" method="get" class="navbar-form navbar-left">
+			<div class="form-group">
+			  <input type="text" name="name" class="form-control" placeholder="Name...">
+			</div>
+			<button type="submit" class="btn btn-default">Search</button>
+		  </form>
+		  <ul class="nav navbar-nav navbar-right">
+			  <li><a href="{{ url_for('new_user') }}">New</a></li>
+			  <li><a href="{{ url_for('users') }}">View users</a></li>
+		  </ul>
+		</div>
+	  </div>
+	</nav>
+	//-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/">ລາຄາດີ</a>
+  <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navber" aria-controls="Navber" aria-expanded="false" aria-label="ナビゲーションの切替">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="Navber">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">ຫນ້າທໍາອິດ<span class="sr-only">(現位置)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/aboutus">ຕິດຕໍ່</a>
+      </li>
+      <!--
+      <li class="nav-item dropdown">
+        <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          ドロップダウン
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">メニュー1</a>
+          <a class="dropdown-item" href="#">メニュー2</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">その他</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">無効</a>
+      </li>
+      //-->
+    </ul>
+    <form class="form-inline my-2 my-lg-0" action="{{ url_for('search') }}" method="get">
+      <input type="search" name="first_name" class="form-control mr-sm-2" placeholder="ຊອກ..." aria-label="ຊອກ...">
+      <button type="submit" class="btn btn-outline-success my-2 my-sm-0">ຊອກ</button>
+    </form>
+		  <ul class="nav navbar-nav navbar-right">
+			  <li><a href="{{ url_for('new_user') }}">New</a></li>
+			  <li><a href="{{ url_for('users') }}">View users</a></li>
+		  </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+	<div class="container">
+		{# Flashed messages #}
+		{% with messages = get_flashed_messages(with_categories=true) %}
+		  {% if messages %}
+			{% for category, message in messages %}
+			  <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+			{% endfor %}
+		  {% endif %}
+		{% endwith %}
+		{# End Flashed messages #}
+		{% block body %}{% endblock %}
+	</div>
+    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap-confirmation.min.js') }}"></script>
+  </body>
+</html>
