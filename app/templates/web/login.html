@@ -1,0 +1,9 @@
+{% extends 'layouts/master.html' %}
+{% block title %}ເຂົ້າສູ່ລະບົບ{% endblock %}
+{% block body %}
+<h1>ເຂົ້າສູ່ລະບົບ</h1>
+<form action="{{ url_for('login') }}" method="post">
+	{{ generate_fields(form) }}
+	<input type="submit" class="btn btn-success" value="Submit">
+</form>
+{% endblock %}

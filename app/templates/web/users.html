@@ -7,7 +7,7 @@
 		<tr>
 			<th scope="col">ຊື່</th>
 			<th scope="col">ນາມສະກຸນ</th>
-			<th scope="col">Nickname</th>
+			<th scope="col">Username</th>
 			<th scope="col">ລະຫັດຜ່ານ</th>
 			<th scope="col">ອີເມວ</th>
 			<th scope="col">ເບີໂທລະສັບ</th>
@@ -19,8 +19,9 @@
 		<tr>
 			<td>{{ user.first_name }}</td>
 			<td>{{ user.family_name }}</td>
-			<td>{{ user.nickname }}</td>
+			<td>{{ user.username }}</td>
 			<td>{{ user.password }}</td>
+			<td>{{ user.password_hash }}</td>
 			<td>{{ user.email }}</td>
 			<td>{{ user.phone }}</td>
 			<td class="text-right">
