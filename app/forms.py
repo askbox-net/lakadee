@@ -2,7 +2,7 @@
 
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField
+from wtforms import StringField, BooleanField, HiddenField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Email, Length
 
 
@@ -19,3 +19,11 @@ class LoginForm(FlaskForm):
     username = StringField('Username / ອີເມວ / ເບີໂທລະສັບ', validators=[Length(min=-1, max=80, message='You cannot have more than 80 characters')])
     password = StringField('ລະຫັດຜ່ານ', validators=[DataRequired(), Length(min=-1, max=80, message='You cannot have more than 80 characters')])
     remember_me = BooleanField('Remember me')
+
+
+class ItemForm(FlaskForm):
+    #form_name = HiddenField('Form Name')
+    categories = SelectField('Categories', validators=[DataRequired()], choices = [('cpp', 'C++'), ('py', 'Python')])#, id='select_state')
+    #BooleanField
+    name = StringField('ຊື່', validators=[DataRequired(), Length(min=-1, max=80, message='You cannot have more than 80 characters')])
+    #submit = SubmitField('Select County!')

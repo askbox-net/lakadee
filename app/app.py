@@ -3,8 +3,7 @@
 
 from flask import Flask, redirect, url_for, render_template, request, flash
 from . models import User
-from . forms import UserForm
-from . forms import LoginForm
+from . forms import UserForm, LoginForm, ItemForm
 from . baseapp import app
 from . baseapp import db
 from . baseapp import login_manager
@@ -53,6 +52,12 @@ def login():
         return flask.redirect(next or flask.url_for('index'))
     return flask.render_template('web/login.html', form=form)
 """
+
+@app.route('/item',methods=['GET','POST'])
+def item():
+    form = ItemForm()
+    return render_template('web/item.html', form=form)
+    #return "yxz" 
 
 @app.route('/login',methods=['GET','POST'])
 def login():
