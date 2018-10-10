@@ -55,15 +55,19 @@ class Brand(db.Model):
 
 
 
-class Item(db.Model):
-    __tablename__ = 'items'
+class Product(db.Model):
+    __tablename__ = 'products'
 
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    category_id = db.Column(db.Integer)
+    brand_id = db.Column(db.Integer)
+
     price = db.Column(db.Integer)
-    category = db.Column(db.Integer)
-    brand = db.Column(db.Integer)
     name = db.Column(db.String(80), nullable=False)
     description = db.Column(db.String(80), nullable=False)
+
+    img_ids = db.Column(db.String(80), nullable=False)
 
     created_at = db.Column(db.DateTime)
     updated_at = db.Column(db.DateTime)

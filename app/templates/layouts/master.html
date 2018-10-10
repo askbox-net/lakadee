@@ -93,7 +93,19 @@
 		{% block body %}{% endblock %}
 	</div>
     <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/tooltip.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap-confirmation.min.js') }}"></script>
+<script type="text/javascript">
+      $(function() {  
+
+	$('[data-toggle=confirmation]').confirmation({
+		rootSelector: '[data-toggle=confirmation]',
+		//btnOkLabel: 'Si',
+		//btnCancelLabel: 'No'
+	});
+      });      
+</script>
   </body>
 </html>
