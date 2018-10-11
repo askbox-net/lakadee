@@ -21,7 +21,7 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember me')
 
 
-class ItemForm(FlaskForm):
+class ProductForm(FlaskForm):
     #form_name = HiddenField('Form Name')
     categories = SelectField('Categories', validators=[DataRequired()], choices = [('cpp', 'C++'), ('py', 'Python')])#, id='select_state')
     #BooleanField
