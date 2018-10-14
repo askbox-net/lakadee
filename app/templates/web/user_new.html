@@ -2,7 +2,7 @@
 {% block title %}New user{% endblock %}
 {% block body %}
 <h1>New user</h1>
-<form action="{{ url_for('new_user') }}" method="post">
+<form action="{{ url_for('user_new') }}" method="post">
 	{{ generate_fields(form) }}
 	<input type="submit" class="btn btn-success" value="Add">
 </form>

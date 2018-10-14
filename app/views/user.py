@@ -73,8 +73,8 @@ def users():
     return render_template('./web/users.html', users=users)
 
 
-@app.route("/new_user", methods=('GET', 'POST'))
-def new_user():
+@app.route("/user/new", methods=('GET', 'POST'))
+def user_new():
     '''
     Create new user
     '''
@@ -93,11 +93,11 @@ def new_user():
             db.session.rollback()
             flash('Error generating user.', 'danger')
 
-    return render_template('web/new_user.html', form=form)
+    return render_template('web/user_new.html', form=form)
 
 
-@app.route("/edit_user/<id>", methods=('GET', 'POST'))
-def edit_user(id):
+@app.route("/user/edit/<id>", methods=('GET', 'POST'))
+def user_edit(id):
     '''
     Edit user
 
@@ -117,7 +117,7 @@ def edit_user(id):
         except:
             db.session.rollback()
             flash('Error update user.', 'danger')
-    return render_template('web/edit_user.html', form=form)
+    return render_template('web/user_edit.html', form=form)
 
 
 @app.route("/search")
@@ -132,8 +132,8 @@ def search():
     return render_template('web/users.html', users=all_users)
 
 
-@app.route("/users/delete", methods=('POST',))
-def users_delete():
+@app.route("/user/delete", methods=('POST',))
+def user_delete():
     '''
     Delete user
     '''

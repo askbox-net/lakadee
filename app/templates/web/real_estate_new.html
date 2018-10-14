@@ -1,0 +1,10 @@
+{% extends 'layouts/master.html' %}
+{% block title %}Product{% endblock %}
+{% block body %}
+<h1>Real State</h1>
+<form action="{{ url_for('real_estate_add') }}" method="post">
+	{{ generate_fields(form) }}
+	<input type="submit" class="btn btn-success" value="Add">
+</form>
+{% endblock %}
+

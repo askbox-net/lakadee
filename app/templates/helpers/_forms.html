@@ -1,6 +1,6 @@
 {% macro generate_fields(form) -%}
 	{% for field in form %}
-		{% if field.type != 'CSRFTokenField' %}
+		{% if field.type not in ('CSRFTokenField', 'HiddenField') %}
 			<div class="form-group{%if field.errors %} has-error{% endif %}">
 			{{ field.label }} 
 			{% if field.type in ('StringField', 'PasswordField')  %}

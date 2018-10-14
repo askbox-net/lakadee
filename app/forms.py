@@ -3,7 +3,12 @@
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, HiddenField, SelectField, SubmitField
+from wtforms import IntegerField, FloatField
+#from wtforms import FileField #, FileRequired, FileAllowed,
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms.validators import DataRequired, Email, Length
+
+from . baseapp import province_master, district_master
 
 
 class UserForm(FlaskForm):
@@ -21,9 +26,41 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember me')
 
 
-class ProductForm(FlaskForm):
+class BaseForm(FlaskForm):
     #form_name = HiddenField('Form Name')
+    #user_id = HiddenField()
+    #user_id = HiddenField(coerce=int)
+    #user_id = IntegerField(widget=HiddenField())
+    user_id = IntegerField()
+
+
+class ProductForm(BaseForm):
+    brand_id = HiddenField()
     categories = SelectField('Categories', validators=[DataRequired()], choices = [('cpp', 'C++'), ('py', 'Python')])#, id='select_state')
     #BooleanField
     name = StringField('ຊື່', validators=[DataRequired(), Length(min=-1, max=80, message='You cannot have more than 80 characters')])
     #submit = SubmitField('Select County!')
+    price = IntegerField('price', validators=[DataRequired(), Length(min=-1, max=32, message='You cannot have more than 32 characters')])
+
+
+class CarForm(BaseForm):
+    brand_id = HiddenField()
+
+
+class ImageForm(BaseForm):
+    binary = FileField('ຮູບພາບ', validators=[FileRequired(), FileAllowed(['png', 'jpg', 'jpeg', 'gif'], 'Images only!')])
+    real_estate_id = IntegerField()
+
+
+class RealEstateForm(BaseForm):
+    province_id = SelectField('ແຂວງ', coerce=int, validators=[DataRequired()], choices=province_master, default=15) #province_master[15])#, id='select_state')
+    district_id = SelectField('ເມືອງ', coerce=int, validators=[DataRequired()], choices=district_master, default=1) #province_master[15])#, id='select_state')
+
+    name = StringField('ຫົວຂໍ້', validators=[DataRequired(), Length(min=-1, max=80, message='You cannot have more than 80 characters')])
+    description = StringField('ລາຍລະອຽດ', validators=[DataRequired(), Length(min=-1, max=160, message='You cannot have more than 160 characters')])
+
+    area = FloatField('ເນື້ອທີ່', validators=[DataRequired()])
+    price = IntegerField('ລາຄາ', validators=[DataRequired()])
+    geo_x = FloatField('geo_x', validators=[DataRequired()])
+    geo_y = FloatField('geo_y', validators=[DataRequired()])
+

@@ -1,7 +1,7 @@
 {% extends 'layouts/master.html' %}
 {% block title %}View{% endblock %}
 {% block body %}
-<h1>Users List</h1>
+<h1>Real Estate List</h1>
 <table class="table table-hover">
 	<thead>
 		<tr>
@@ -15,21 +15,21 @@
 		</tr>
 	</thead>
 	<tbody>
-	{% for user in users %}
+	{% for real_estate in real_estates %}
 		<tr>
-			<td>{{ user.first_name }}</td>
-			<td>{{ user.family_name }}</td>
-			<td>{{ user.username }}</td>
-			<td>{{ user.password }}</td>
-			<td>{{ user.email }}</td>
-			<td>{{ user.phone }}</td>
+			<td>{{ real_estate.name }}</td>
+			<td>{{ real_estate.description }}</td>
+			<td>{{ real_estate.email }}</td>
+			<td>{{ real_estate.phone }}</td>
 			<td class="text-right">
 				<div class="row">
-					<form action="{{ url_for('user_delete') }}" method="post" class="pull-right">
-						<input type="hidden" name="id" value="{{ user.id }}">
+					<form action="{{ url_for('real_estate_delete') }}" method="post" class="pull-right">
+						<input type="hidden" name="id" value="{{ real_estate.id }}">
 						<input type="submit" class="btn btn-danger" data-toggle="confirmation" {# data-title="¿Estas seguro?" #} value="Delete">
 					</form>
-					<a class="btn btn-primary pull-right" href="{{ url_for('user_edit', id=user.id) }}">Edit</a>
+					<a class="btn btn-primary pull-right" href="{{ url_for('real_estate_edit', id=real_estate.id) }}">Edit</a>
+
+					<a class="btn btn-primary pull-right" href="{{ url_for('image_add', id=real_estate.id) }}">Image</a>
 				</div>
 			</td>
 		</tr>
