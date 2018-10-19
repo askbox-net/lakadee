@@ -7,6 +7,13 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
+class Table(db.Model):
+    __tablename__ = 'tables'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+
+
 class Province(db.Model):
     __tablename__ = 'provinces'
 
@@ -75,8 +82,6 @@ class Brand(db.Model):
 
 
 class Base(object):
-    #__tablename__ = 'products'
-
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer)
 
@@ -87,8 +92,11 @@ class Base(object):
     category_ids = db.Column(db.String(80), nullable=True)
     img_ids = db.Column(db.String(80), nullable=True)
 
-    #email = db.Column(db.String(200), nullable=True, unique=False)
-    #phone = db.Column(db.String(20), nullable=True, unique=False)
+    email = db.Column(db.String(200), nullable=True, unique=False)
+    phone = db.Column(db.String(20), nullable=True, unique=False)
+
+    delete_flag = db.Column(db.Integer, default=0)
+    complete_flag = db.Column(db.Integer, default=0)
 
     created_at = db.Column(db.DateTime)
     updated_at = db.Column(db.DateTime)
@@ -124,6 +132,8 @@ class Image(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False)
+    table_id = db.Column(db.Integer, nullable=False)
+    base_id = db.Column(db.Integer, nullable=False)
     mime = db.Column(db.String(24), nullable=False)
     binary = db.Column(db.Binary())
 

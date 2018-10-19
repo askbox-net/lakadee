@@ -7,35 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>{% block title %}{% endblock %} | ລາຄາດີ </title>
 	<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/tooltip.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap-confirmation.min.js') }}"></script>
   </head>
   <body>
-	  <!--
-	<nav class="navbar navbar-default">
-	  <div class="container-fluid">
-		<div class="navbar-header">
-		  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-			<span class="sr-only">Toggle navigation</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		  </button>
-		  <a class="navbar-brand" href="/">Contact Manager</a>
-		</div>
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			<form action="{{ url_for('search') }}" method="get" class="navbar-form navbar-left">
-			<div class="form-group">
-			  <input type="text" name="name" class="form-control" placeholder="Name...">
-			</div>
-			<button type="submit" class="btn btn-default">Search</button>
-		  </form>
-		  <ul class="nav navbar-nav navbar-right">
-			  <li><a href="{{ url_for('user_new') }}">New</a></li>
-			  <li><a href="{{ url_for('users') }}">View users</a></li>
-		  </ul>
-		</div>
-	  </div>
-	</nav>
-	//-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="/">ລາຄາດີ</a>
   <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navber" aria-controls="Navber" aria-expanded="false" aria-label="ナビゲーションの切替">
@@ -50,22 +28,6 @@
       <li class="nav-item">
         <a class="nav-link" href="/aboutus">ຕິດຕໍ່</a>
       </li>
-      <!--
-      <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          ドロップダウン
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">メニュー1</a>
-          <a class="dropdown-item" href="#">メニュー2</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">その他</a>
-        </div>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">無効</a>
-      </li>
-      //-->
     </ul>
     <form class="form-inline my-2 my-lg-0" action="{{ url_for('search') }}" method="get">
       <input type="search" name="first_name" class="form-control mr-sm-2" placeholder="ຊອກ..." aria-label="ຊອກ...">
@@ -92,11 +54,6 @@
 		{# End Flashed messages #}
 		{% block body %}{% endblock %}
 	</div>
-    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/tooltip.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap-confirmation.min.js') }}"></script>
 <script type="text/javascript">
       $(function() {  
 

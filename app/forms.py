@@ -28,10 +28,10 @@ class LoginForm(FlaskForm):
 
 class BaseForm(FlaskForm):
     #form_name = HiddenField('Form Name')
-    #user_id = HiddenField()
+    user_id = HiddenField()
     #user_id = HiddenField(coerce=int)
     #user_id = IntegerField(widget=HiddenField())
-    user_id = IntegerField()
+    #user_id = IntegerField()
 
 
 class ProductForm(BaseForm):

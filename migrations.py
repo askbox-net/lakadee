@@ -4,6 +4,7 @@
 import datetime
 from faker import Factory
 from app.baseapp import db
+from app.models import Table
 from app.models import User
 from app.models import Province
 from app.models import District
@@ -34,36 +35,43 @@ https://lo.wikipedia.org/wiki/%E0%BA%9B%E0%BA%B0%E0%BB%80%E0%BA%97%E0%BA%94%E0%B
 """
 
 provinces = [
-'ອັດຕະປື',
-'ບໍ່ແກ້ວ',
-'ບໍລິຄຳໄຊ',
-'ຈຳປາສັກ',
-'ຫົວພັນ',
-'ຄໍາມ່ວນ',
-'ຫຼວງນ້ຳທາ',
-'ຫຼວງພະບາງ',
-'ອຸດົມໄຊ',
-'ຜົ້ງສາລີ',
-'ໄຊຍະບູລີ',
-'ສາລະວັນ',
-'ສະຫວັນນະເຂດ',
-'ເຊກອງ',
-'ນະຄອນຫຼວງວຽງຈັນ',
-'ວຽງຈັນ',
-'ຊຽງຂວາງ'
+{ 'id': 1, 'name': 'ອັດຕະປື' },
+{ 'id': 2, 'name': 'ບໍ່ແກ້ວ' },
+{ 'id': 3, 'name': 'ບໍລິຄຳໄຊ' },
+{ 'id': 4, 'name': 'ຈຳປາສັກ' } ,
+{ 'id': 5, 'name': 'ຫົວພັນ' }, 
+{ 'id': 6, 'name': 'ຄໍາມ່ວນ' },
+{ 'id': 7, 'name': 'ຫຼວງນ້ຳທາ' },
+{ 'id': 8, 'name': 'ຫຼວງພະບາງ' },
+{ 'id': 9, 'name': 'ອຸດົມໄຊ' },
+{ 'id': 10, 'name': 'ຜົ້ງສາລີ' },
+{ 'id': 11, 'name': 'ໄຊຍະບູລີ' },
+{ 'id': 12, 'name': 'ສາລະວັນ' },
+{ 'id': 13, 'name': 'ສະຫວັນນະເຂດ' },
+{ 'id': 14, 'name': 'ເຊກອງ' },
+{ 'id': 15, 'name': 'ນະຄອນຫຼວງວຽງຈັນ' },
+{ 'id': 16, 'name': 'ວຽງຈັນ' },
+{ 'id': 17, 'name': 'ຊຽງຂວາງ' }
 ]
 
-p15 = [
-'ເມືອງຈັນທະບູລີ', # (1-01)
-'ເມືອງສີໂຄດຕະບອງ', # (1-02)
-'ເມືອງໄຊເສດຖາ', # (1-03)
-'ເມືອງສີສັດຕະນາກ', # (1-04)
-'ເມືອງນາຊາຍທອງ', # (1-05)
-'ເມືອງໄຊທານີ', # (1-06)
-'ເມືອງຫາດຊາຍຟອງ', # (1-07)
-'ເມືອງສັງທອງ', # (1-08)
-'ເມືອງປາກງື່ມ' # (1-09)
+districts = [
+    { 'id': 1, 'province_id': 15, 'name': 'ເມືອງຈັນທະບູລີ' }, # (1-01)
+    { 'id': 2, 'province_id': 15, 'name': 'ເມືອງສີໂຄດຕະບອງ' }, # (1-02)
+    { 'id': 3, 'province_id': 15, 'name': 'ເມືອງໄຊເສດຖາ' }, # (1-03)
+    { 'id': 4, 'province_id': 15, 'name': 'ເມືອງສີສັດຕະນາກ' }, # (1-04)
+    { 'id': 5, 'province_id': 15, 'name': 'ເມືອງນາຊາຍທອງ' }, # (1-05)
+    { 'id': 6, 'province_id': 15, 'name': 'ເມືອງໄຊທານີ' }, # (1-06)
+    { 'id': 7, 'province_id': 15, 'name': 'ເມືອງຫາດຊາຍຟອງ' }, # (1-07)
+    { 'id': 8, 'province_id': 15, 'name': 'ເມືອງສັງທອງ' }, # (1-08)
+    { 'id': 9, 'province_id': 15, 'name': 'ເມືອງປາກງື່ມ' } # (1-09)
 ]
+
+tables = [
+    { 'id': 1, 'name': 'real_estates' },
+    { 'id': 2, 'name': 'cars' },
+    { 'id': 3, 'name': 'products' },
+]
+
 
 fake = Factory.create()
 # Spanish
@@ -75,16 +83,22 @@ db.create_all()
 db.session.commit()
 
 
-for province in provinces:
-    print(province)
-    province = Province(name=province, created_at=datetime.datetime.today(), updated_at=datetime.datetime.today())
+for obj in tables:
+    print(obj)
+    table = Table(id=obj['id'], name=obj['name'])
+    db.session.add(table)
+    
+
+for obj in provinces:
+    print(obj)
+    province = Province(id=obj['id'], name=obj['name'], created_at=datetime.datetime.today(), updated_at=datetime.datetime.today())
     db.session.add(province)
 
 db.session.commit()
 
-for p in p15:
-    print(p)
-    district = District(province_id=15, name=p, created_at=datetime.datetime.today(), updated_at=datetime.datetime.today())
+for obj in districts:
+    print(obj)
+    district = District(id=obj['id'], province_id=obj['province_id'], name=obj['name'], created_at=datetime.datetime.today(), updated_at=datetime.datetime.today())
     db.session.add(district)
 
 db.session.commit()

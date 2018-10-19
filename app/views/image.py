@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 
 
+import tempfile
 from flask import Flask, redirect, url_for, render_template, request, flash
 from flask_login import login_required, current_user, login_user, logout_user
 from werkzeug.utils import secure_filename
@@ -18,26 +19,31 @@ image = Blueprint('image', __name__)
 @login_required
 def image_add(id):
     user_id = current_user.id
-    print('user_id:', current_user.id)
     form = ImageForm(user_id=current_user.id, real_estate_id=id)
-    print(form)
+    #print(form)
 
     if form.validate_on_submit():
         #filename = secure_filename(form.binary.file.filename)
         #file = request.files['file']
-        print('file:', form.binary.data.filename)
-        print('file:', vars(form.binary.data))
-        print('mime:', form.binary.data.headers['Content-Type'])
+        #print('file:', form.binary.data.filename)
+        #print('file:', vars(form.binary.data))
+        #print('mime:', form.binary.data.headers['Content-Type'])
         mime = form.binary.data.headers['Content-Type']
 
-        form.binary.data.save('/tmp/xyz.jpg')
-        image = Image(user_id=user_id, mime=mime)
+        with tempfile.NamedTemporaryFile(delete=False) as tf:
+            form.binary.data.save(tf)
+            temp_filename = tf.name
+
+        with open(temp_filename, 'rb') as fp:
+            binary = fp.read()
+
+        image = Image(user_id=user_id, mime=mime, binary=binary)
         #print('filename:', filename)
         #form.populate_obj(image)
         db.session.add(image)
 
         #print(image.area, image.district_id)
-        print(vars(image))
+        #print(vars(image))
         try:
             db.session.commit()
             # User info

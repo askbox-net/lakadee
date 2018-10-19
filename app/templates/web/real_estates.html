@@ -30,11 +30,44 @@
 					<a class="btn btn-primary pull-right" href="{{ url_for('real_estate_edit', id=real_estate.id) }}">Edit</a>
 
 					<a class="btn btn-primary pull-right" href="{{ url_for('image_add', id=real_estate.id) }}">Image</a>
+
+					<form action="{{ url_for('image_add', id=real_estate.id) }}" method="post" class="pull-right">
+						<input type="hidden" name="id" value="{{ real_estate.id }}">
+
+						<img id="img_{{ real_estate.id }}" style="width:300px;height:300px;">
+						<input type="file" id="real_estate_{{ real_estate.id }}" class="btn">
+					</form>
 				</div>
 			</td>
 		</tr>
 	{% endfor %}
 	</tbody>
 </table>
+
+<script>
+$(function(){
+  $('#real_estate_1').change(function(e){
+    //ファイルオブジェクトを取得する
+    var file = e.target.files[0];
+    var reader = new FileReader();
+ 
+    //画像でない場合は処理終了
+    if(file.type.indexOf("image") < 0){
+      alert("画像ファイルを指定してください。");
+      return false;
+    }
+ 
+    //アップロードした画像を設定する
+    reader.onload = (function(file){
+      return function(e){
+        $("#img_1").attr("src", e.target.result);
+        $("#img_1").attr("title", file.name);
+      };
+    })(file);
+    reader.readAsDataURL(file);
+ 
+  });
+});
+</script>
 
 {% endblock %}
