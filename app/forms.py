@@ -28,10 +28,13 @@ class LoginForm(FlaskForm):
 
 class BaseForm(FlaskForm):
     #form_name = HiddenField('Form Name')
+    id = HiddenField()
     user_id = HiddenField()
     #user_id = HiddenField(coerce=int)
     #user_id = IntegerField(widget=HiddenField())
     #user_id = IntegerField()
+    email = StringField('ອີເມວ', validators=[Email(), Length(min=-1, max=200, message='You cannot have more than 200 characters')])
+    phone = StringField('ເບີໂທລະສັບ', validators=[Length(min=-1, max=20, message='You cannot have more than 20 characters')])
 
 
 class ProductForm(BaseForm):
@@ -53,6 +56,8 @@ class ImageForm(BaseForm):
 
 
 class RealEstateForm(BaseForm):
+    img_ids = HiddenField()
+    table_id = HiddenField(default=1) 
     province_id = SelectField('ແຂວງ', coerce=int, validators=[DataRequired()], choices=province_master, default=15) #province_master[15])#, id='select_state')
     district_id = SelectField('ເມືອງ', coerce=int, validators=[DataRequired()], choices=district_master, default=1) #province_master[15])#, id='select_state')
 
@@ -61,6 +66,6 @@ class RealEstateForm(BaseForm):
 
     area = FloatField('ເນື້ອທີ່', validators=[DataRequired()])
     price = IntegerField('ລາຄາ', validators=[DataRequired()])
-    geo_x = FloatField('geo_x', validators=[DataRequired()])
-    geo_y = FloatField('geo_y', validators=[DataRequired()])
+    #geo_x = FloatField('geo_x')#, validators=[DataRequired()])
+    #geo_y = FloatField('geo_y')#, validators=[DataRequired()])
 

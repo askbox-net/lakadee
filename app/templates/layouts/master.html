@@ -1,68 +1,31 @@
-{% from 'helpers/_forms.html' import generate_fields with context %}
-<!DOCTYPE html>
+{% from 'helpers/_forms.html' import generate_fields with context %}<!DOCTYPE html>
 <html lang="la">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>{% block title %}{% endblock %} | ລາຄາດີ </title>
-	<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
-    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/tooltip.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap-confirmation.min.js') }}"></script>
-  </head>
-  <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="/">ລາຄາດີ</a>
-  <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navber" aria-controls="Navber" aria-expanded="false" aria-label="ナビゲーションの切替">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="Navber">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="/">ຫນ້າທໍາອິດ<span class="sr-only">(現位置)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/aboutus">ຕິດຕໍ່</a>
-      </li>
-    </ul>
-    <form class="form-inline my-2 my-lg-0" action="{{ url_for('search') }}" method="get">
-      <input type="search" name="first_name" class="form-control mr-sm-2" placeholder="ຊອກ..." aria-label="ຊອກ...">
-      <button type="submit" class="btn btn-outline-success my-2 my-sm-0">ຊອກ</button>
-    </form>
-		  <ul class="navbar-nav navbar-right">
-			  <li class="nav-item"><a class="nav-link" href="{{ url_for('user_new') }}">New</a></li>
-			  <li class="nav-item"><a class="nav-link" href="{{ url_for('users') }}">View users</a></li>
-			  <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
-			  <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
-		  </ul>
-  </div><!-- /.navbar-collapse -->
-</nav>
-
-	<div class="container">
-		{# Flashed messages #}
-		{% with messages = get_flashed_messages(with_categories=true) %}
-		  {% if messages %}
-			{% for category, message in messages %}
-			  <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
-			{% endfor %}
-		  {% endif %}
-		{% endwith %}
-		{# End Flashed messages #}
-		{% block body %}{% endblock %}
-	</div>
-<script type="text/javascript">
-      $(function() {  
-
-	$('[data-toggle=confirmation]').confirmation({
-		rootSelector: '[data-toggle=confirmation]',
-		//btnOkLabel: 'Si',
-		//btnCancelLabel: 'No'
-	});
-      });      
-</script>
-  </body>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>{% block title %}{% endblock %} | ລາຄາດີ </title>
+		<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+		<script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/tooltip.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/bootstrap-confirmation.min.js') }}"></script>
+	</head>
+	<body>
+		{% block header %}{% endblock %}
+		<div class="container">
+			{# Flashed messages #}
+			{% with messages = get_flashed_messages(with_categories=true) %}
+			  {% if messages %}
+				{% for category, message in messages %}
+				  <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+				{% endfor %}
+			  {% endif %}
+			{% endwith %}
+			{# End Flashed messages #}
+			{% block body %}{% endblock %}
+		</div>
+		{% block footer %}{% endblock %}
+	</body>
 </html>

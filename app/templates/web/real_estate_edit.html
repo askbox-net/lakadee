@@ -1,7 +1,8 @@
 {% extends 'layouts/master.html' %}
 {% block title %}Edit user{% endblock %}
+{% block header %}{% include 'layouts/header_real_estate.html' %}{% endblock %}
 {% block body %}
-<h1>Edit Real Estate</h1>
+<h1>Edit ດິນ, ເຮືອນ, ລົດມືສອງ</h1>
 <form method="post">
 	{{ generate_fields(form) }}
 	<input type="submit" class="btn btn-success" value="Save">

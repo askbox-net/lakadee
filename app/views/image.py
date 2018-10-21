@@ -2,6 +2,7 @@
 
 
 import tempfile
+import re
 from flask import Flask, redirect, url_for, render_template, request, flash
 from flask_login import login_required, current_user, login_user, logout_user
 from werkzeug.utils import secure_filename
@@ -15,9 +16,41 @@ from flask import Blueprint
 image = Blueprint('image', __name__)
 
 
-@app.route('/image/add/<id>',methods=['GET', 'POST'])
+@app.route('/image/new',methods=['POST'])
 @login_required
-def image_add(id):
+def image_new():
+    user_id = current_user.id
+
+    if request.method == 'POST':
+        binary = request.form['binary']
+        user_id = request.form['user_id']
+        table_id = request.form['table_id']
+        base_id = request.form['base_id']
+        binary = request.form['binary']
+
+
+        print('base_id = ', base_id)
+        #print('form = ', request.form)
+        import base64
+
+        try:
+            imgdata = re.sub('^data:image/.+;base64,', '', binary)
+            imgdata = base64.b64decode(imgdata)
+            #imgdata = re.sub('^data:image/.+;base64,', '', imgdata)
+            #print('imgdata:', binary)
+            #base64.b64decode(s)
+            filename = '/tmp/some_image.png'  # I assume you have a way of picking unique filenames
+            with open(filename, 'wb') as f:
+                f.write(imgdata)
+        except Exception as e:
+            print('error:', e)
+
+    return ''
+
+
+@app.route('/image/new/<id>',methods=['GET', 'POST'])
+@login_required
+def image_new_id(id):
     user_id = current_user.id
     form = ImageForm(user_id=current_user.id, real_estate_id=id)
     #print(form)
@@ -91,32 +124,34 @@ def image_edit(id):
     return render_template('web/image_edit.html', form=form)
 
 
-@app.route('/image/add',methods=['GET','POST'])
-@login_required
-def image_add():
-    user_id = current_user.id
-    print('user_id:', current_user.id)
-    form = RealEstateForm(user_id=current_user.id)
-    print(form)
-
-    if form.validate_on_submit():
-        image = RealEstate()
-        form.populate_obj(image)
-        db.session.add(image)
-
-        print(image.area, image.district_id)
-        print(vars(image))
-        try:
-            db.session.commit()
-            # User info
-            flash('real_state created correctly', 'success')
-            return redirect(url_for('image_add'))
-        except:
-            db.session.rollback()
-            flash('Error generating Real State.', 'danger')
-        pass
-
-    return render_template('web/image_new.html', form=form)
+"""
+#@app.route('/image/new',methods=['GET','POST'])
+#@login_required
+#def image_new():
+#    user_id = current_user.id
+#    print('user_id:', current_user.id)
+#    form = RealEstateForm(user_id=current_user.id)
+#    print(form)
+#
+#    if form.validate_on_submit():
+#        image = RealEstate()
+#        form.populate_obj(image)
+#        db.session.add(image)
+#
+#        print(image.area, image.district_id)
+#        print(vars(image))
+#        try:
+#            db.session.commit()
+#            # User info
+#            flash('real_state created correctly', 'success')
+#            return redirect(url_for('image_new'))
+#        except:
+#            db.session.rollback()
+#            flash('Error generating Real State.', 'danger')
+#        pass
+#
+#    return render_template('web/image_new.html', form=form)
+"""
 
 
 @app.route("/image/delete", methods=('POST',))

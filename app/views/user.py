@@ -64,11 +64,17 @@ def load_user(id):
 
 
 @app.route("/users")
-#@login_required
+@login_required
 def users():
     '''
     Show alls users
     '''
+
+    print(current_user)
+    print('authority:', current_user.authority)
+    if current_user.authority != 0:
+        return redirect(url_for('real_estates'))
+
     users = User.query.order_by(User.first_name).all()
     return render_template('./web/users.html', users=users)
 
@@ -88,7 +94,7 @@ def user_new():
             db.session.commit()
             # User info
             flash('User created correctly', 'success')
-            return redirect(url_for('users'))
+            return redirect(url_for('login'))
         except:
             db.session.rollback()
             flash('Error generating user.', 'danger')

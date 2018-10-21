@@ -77,9 +77,22 @@ fake = Factory.create()
 # Spanish
 #fake = Factory.create('es_ES')
 # Reload tables
-#db.drop_all()
+db.drop_all()
 db.create_all()
 # Make 100 fake contacts
+db.session.commit()
+
+first_name = 'admin'
+family_name = 'admin'
+username = 'admin'
+password = 'admin'
+email = 'admin@gmail.com'
+phone = '000-1111-2222'
+authority = 0
+
+user = User(authority=authority, first_name=first_name, family_name=family_name, username=username, password=password, email=email, phone=phone)
+user.set_password(password)
+db.session.add(user)
 db.session.commit()
 
 

@@ -1,14 +1,13 @@
 {% extends 'layouts/master.html' %}
 {% block title %}View{% endblock %}
+{% block header %}{% include 'layouts/header_real_estate.html' %}{% endblock %}
 {% block body %}
 <h1>Real Estate List</h1>
 <table class="table table-hover">
 	<thead>
 		<tr>
-			<th scope="col">ຊື່</th>
-			<th scope="col">ນາມສະກຸນ</th>
-			<th scope="col">Username</th>
-			<th scope="col">ລະຫັດຜ່ານ</th>
+			<th scope="col">ຫົວຂໍ້</th>
+			<th scope="col">ລາຍລະອຽດ</th>
 			<th scope="col">ອີເມວ</th>
 			<th scope="col">ເບີໂທລະສັບ</th>
 			<td></td>
@@ -21,22 +20,23 @@
 			<td>{{ real_estate.description }}</td>
 			<td>{{ real_estate.email }}</td>
 			<td>{{ real_estate.phone }}</td>
+			<td>{{ real_estate.complete_flag }}</td>
 			<td class="text-right">
 				<div class="row">
 					<form action="{{ url_for('real_estate_delete') }}" method="post" class="pull-right">
 						<input type="hidden" name="id" value="{{ real_estate.id }}">
-						<input type="submit" class="btn btn-danger" data-toggle="confirmation" {# data-title="¿Estas seguro?" #} value="Delete">
+						<input type="submit" class="btn btn-danger" data-toggle="confirmation" value="Delete">
 					</form>
 					<a class="btn btn-primary pull-right" href="{{ url_for('real_estate_edit', id=real_estate.id) }}">Edit</a>
 
-					<a class="btn btn-primary pull-right" href="{{ url_for('image_add', id=real_estate.id) }}">Image</a>
-
-					<form action="{{ url_for('image_add', id=real_estate.id) }}" method="post" class="pull-right">
+					<a class="btn btn-primary pull-right" href="{{ url_for('image_new_id', id=real_estate.id) }}">Image</a>
+					<!--
+					<form action="{{ url_for('image_new_id', id=real_estate.id) }}" method="post" class="pull-right">
 						<input type="hidden" name="id" value="{{ real_estate.id }}">
-
 						<img id="img_{{ real_estate.id }}" style="width:300px;height:300px;">
 						<input type="file" id="real_estate_{{ real_estate.id }}" class="btn">
 					</form>
+					//-->
 				</div>
 			</td>
 		</tr>

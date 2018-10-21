@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from .. baseapp import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+import json
 
 
 class Table(db.Model):
@@ -37,6 +38,7 @@ class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
+    authority = db.Column(db.Integer, nullable=False, default=1)
     first_name = db.Column(db.String(80), nullable=False)
     family_name = db.Column(db.String(100), nullable=True)
     username = db.Column(db.String(80), nullable=True, unique=True)
@@ -48,10 +50,10 @@ class User(UserMixin, db.Model):
     created_at = db.Column(db.DateTime)
     updated_at = db.Column(db.DateTime)
 
-    def set_password(self,password):
+    def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
-    def check_password(self,password):
+    def check_password(self, password):
         return check_password_hash(self.password_hash,password)
 
     def __repr__(self):
@@ -83,13 +85,14 @@ class Brand(db.Model):
 
 class Base(object):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, nullable=False, index=True)
 
     price = db.Column(db.Integer)
-    name = db.Column(db.String(80), nullable=False)
-    description = db.Column(db.String(160), nullable=False)
+    name = db.Column(db.String(80), nullable=True)
+    description = db.Column(db.String(160), nullable=True)
 
     category_ids = db.Column(db.String(80), nullable=True)
+    #_img_ids = db.Column('img_ids', db.String(80), nullable=True)
     img_ids = db.Column(db.String(80), nullable=True)
 
     email = db.Column(db.String(200), nullable=True, unique=False)
@@ -101,26 +104,41 @@ class Base(object):
     created_at = db.Column(db.DateTime)
     updated_at = db.Column(db.DateTime)
 
+    """
+    @property
+    def img_ids(self):
+        if self._img_ids and len(self._img_ids) == 0:
+            return '[]'
+        return self._img_ids
+        #return json.loads(self._img_ids)
+
+    @img_ids.setter
+    def img_ids(self, ids):
+        if ids and len(ids) > 0:
+            self._img_ids = json.dumps(ids)
+        else:
+            self._img_ids = '[]'
+    """
 
 class Product(Base, db.Model):
     __tablename__ = 'products'
 
-    brand_id = db.Column(db.Integer)
+    brand_id = db.Column(db.Integer, index=True)
     distance = db.Column(db.Integer)
 
 
 class Car(Base, db.Model):
     __tablename__ = 'cars'
 
-    brand_id = db.Column(db.Integer)
-    distance = db.Column(db.Integer)
+    brand_id = db.Column(db.Integer, index=True)
+    distance = db.Column(db.Integer, index=True)
 
 
 class RealEstate(Base, db.Model):
     __tablename__ = 'real_estates'
 
-    province_id = db.Column(db.Integer)
-    district_id = db.Column(db.Integer)
+    province_id = db.Column(db.Integer, index=True)
+    district_id = db.Column(db.Integer, index=True)
     geo_x = db.Column(db.Float)
     geo_y = db.Column(db.Float)
     area = db.Column(db.Float)
