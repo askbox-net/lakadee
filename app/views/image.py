@@ -2,18 +2,34 @@
 
 
 import tempfile
+import filetype
 import re
-from flask import Flask, redirect, url_for, render_template, request, flash
+import json
+from flask import Flask, redirect, url_for, render_template, request, flash, Response
 from flask_login import login_required, current_user, login_user, logout_user
 from werkzeug.utils import secure_filename
 from .. models import Image
 from .. forms import ImageForm
 from .. baseapp import app
 from .. baseapp import db
+from .. models import Image
 
 from flask import Blueprint
 
 image = Blueprint('image', __name__)
+
+
+@app.route('/image/<user_id>/<id>',methods=['GET'])
+def image_id(user_id, id):
+    img = Image.query.filter(Image.user_id==user_id, Image.id==id).first()
+
+    if img:
+        print(user_id, id)
+        print('mime:', img.mime)
+
+        return Response(response=img.binary, content_type=img.mime)
+
+    return ''
 
 
 @app.route('/image/new',methods=['POST'])
@@ -27,23 +43,47 @@ def image_new():
         table_id = request.form['table_id']
         base_id = request.form['base_id']
         binary = request.form['binary']
-
+        checksum = request.form['checksum']
+        mime = request.form['mime']
 
         print('base_id = ', base_id)
         #print('form = ', request.form)
         import base64
+        import mimetypes
 
         try:
-            imgdata = re.sub('^data:image/.+;base64,', '', binary)
-            imgdata = base64.b64decode(imgdata)
-            #imgdata = re.sub('^data:image/.+;base64,', '', imgdata)
-            #print('imgdata:', binary)
-            #base64.b64decode(s)
-            filename = '/tmp/some_image.png'  # I assume you have a way of picking unique filenames
-            with open(filename, 'wb') as f:
-                f.write(imgdata)
+            #imgdata = re.sub('^data:image/.+;base64,', '', binary)
+            imgdata = base64.b64decode(binary)
+            with tempfile.NamedTemporaryFile(delete=False) as tf:
+                tf.write(imgdata)
+                temp_filename = tf.name
+
+            #mime = filetype.guess(temp_filename).mime
+            print('mime : ', mime)
+            with open(temp_filename, 'rb') as fp:
+                binary = fp.read()
+
+            #image = Image(user_id=user_id, table_id=table_id, base_id=base_id, mime=mime, binary=binary)
+            image = Image(user_id=user_id, table_id=table_id, checksum=checksum, mime=mime, binary=binary)
+            #print('filename:', filename)
+            #form.populate_obj(image)
+            db.session.add(image)
+            db.session.commit()
+            # User info
+            #flash('real_state created correctly', 'success')
+            #return redirect(url_for('real_estates'))
+            from sqlalchemy import desc
+            img = Image.query.filter(Image.user_id==user_id, Image.table_id==table_id).order_by(desc(Image.id)).first()
+            data = {
+                    'id': img.id
+            }
+            return json.dumps(data)
+
         except Exception as e:
             print('error:', e)
+
+            db.session.rollback()
+            flash('Error generating Real State.', 'danger')
 
     return ''
 

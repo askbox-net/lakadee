@@ -83,7 +83,7 @@ class Brand(db.Model):
 
 
 
-class Base(object):
+class Item(object):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False, index=True)
 
@@ -100,6 +100,13 @@ class Base(object):
 
     delete_flag = db.Column(db.Integer, default=0)
     complete_flag = db.Column(db.Integer, default=0)
+
+    img1 = db.Column(db.Text, nullable=True, unique=False)
+    img2 = db.Column(db.Text, nullable=True, unique=False)
+    img3 = db.Column(db.Text, nullable=True, unique=False)
+    img4 = db.Column(db.Text, nullable=True, unique=False)
+    img5 = db.Column(db.Text, nullable=True, unique=False)
+    img6 = db.Column(db.Text, nullable=True, unique=False)
 
     created_at = db.Column(db.DateTime)
     updated_at = db.Column(db.DateTime)
@@ -120,21 +127,21 @@ class Base(object):
             self._img_ids = '[]'
     """
 
-class Product(Base, db.Model):
+class Product(Item, db.Model):
     __tablename__ = 'products'
 
     brand_id = db.Column(db.Integer, index=True)
     distance = db.Column(db.Integer)
 
 
-class Car(Base, db.Model):
+class Car(Item, db.Model):
     __tablename__ = 'cars'
 
     brand_id = db.Column(db.Integer, index=True)
     distance = db.Column(db.Integer, index=True)
 
 
-class RealEstate(Base, db.Model):
+class RealEstate(Item, db.Model):
     __tablename__ = 'real_estates'
 
     province_id = db.Column(db.Integer, index=True)
@@ -150,11 +157,11 @@ class Image(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False)
-    table_id = db.Column(db.Integer, nullable=False)
-    base_id = db.Column(db.Integer, nullable=False)
-    mime = db.Column(db.String(24), nullable=False)
+    table_id = db.Column(db.Integer, nullable=True)
+    item_id = db.Column(db.Integer, nullable=True)
+    checksum = db.Column(db.String(32), nullable=True)
+    mime = db.Column(db.String(24), nullable=True)
     binary = db.Column(db.Binary())
-
     created_at = db.Column(db.DateTime)
     updated_at = db.Column(db.DateTime)
 

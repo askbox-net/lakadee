@@ -2,7 +2,7 @@
 {% block title %}View{% endblock %}
 {% block header %}{% include 'layouts/header_real_estate.html' %}{% endblock %}
 {% block body %}
-<h1>Real Estate List</h1>
+<h1>ລາຍຊື່ ດິນ, ເຮືອນ</h1>
 <table class="table table-hover">
 	<thead>
 		<tr>
@@ -21,6 +21,7 @@
 			<td>{{ real_estate.email }}</td>
 			<td>{{ real_estate.phone }}</td>
 			<td>{{ real_estate.complete_flag }}</td>
+			<td><img src="{{ real_estate.img1 }}" width="120"></td>
 			<td class="text-right">
 				<div class="row">
 					<form action="{{ url_for('real_estate_delete') }}" method="post" class="pull-right">

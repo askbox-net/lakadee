@@ -1,8 +1,11 @@
 {% extends 'layouts/master.html' %}
 {% block title %}ດິນ, ເຮືອນ{% endblock %}
+{% block script %}
+	<script src="{{ url_for('static', filename='js/md5.min.js') }}"></script>
+{% endblock %}
 {% block header %}{% include 'layouts/header_real_estate.html' %}{% endblock %}
 {% block body %}
-<h1>ດິນ, ເຮືອນ, ລົດມືສອງ</h1>
+<h1>ເນື້ອໃນຂອງດິນ, ເຮືອນ</h1>
 <div id="preview">
 </div>
 <form action="{{ url_for('real_estate_new') }}" method="post">
@@ -42,13 +45,16 @@ $(function(){
 				no++;
 				//<img class="img-fluid img-thumbnail" alt="">
 				//$preview.append(`<img  class="img-fluid img-thumbnail" id="img_${ no }">`);
-				$preview.append(`<div><div class="col-lg-3 col-md-4 col-xs-6"><a href="#" class="d-block mb-4 h-100"><img id="img_${ no }" class="img-fluid img-thumbnail" alt=""></a><div class="sell-upload-button"><a href="" class="sell-upload-edit">ແກ້ໄຂ</a><a href="">ລຶບ</a></div></div>`)
+				$preview.append(`<div><div class="col-lg-3 col-md-4 col-xs-6"><a href="#" class="d-block mb-4 h-100"><img id="img_${ no }" class="img-fluid img-thumbnail" alt=""></a><div class="sell-upload-button"></div><a href="" class="sell-upload-edit">ແກ້ໄຂ</a><a href="">ລຶບ</a></div>`)
 				//$preview.append($('<img>').attr({
 				$(`#img_${ no }`).attr({
 					src: e.target.result,
 					//width: "150px",
 					//class: "img_preview",
-					title: file.name
+					title: file.name,
+					type: file.type,
+					size: file.size,
+					checksum: md5(e.target.result)
 				});
 			};
 		})(file);
@@ -56,19 +62,34 @@ $(function(){
 		reader.readAsDataURL(file);
 	});
 
-	$('form').submit(function(e) {
-		e.preventDefault();
-		//post()の処理をここに記述する
-		//console.log($('form').serialize());
+	function post(id) {
 		var data = {
 			user_id: $('#user_id').val(),
 			table_id: $('#table_id').val(),
 			base_id: $('#id').val(),
-			binary: $('#img_1').attr('src'),
+			mime: $(`#img_${ id }`).attr('type'),
+			size: $(`#img_${ id }`).attr('size'),
+			checksum: $(`#img_${ id }`).attr('checksum'),
+			//binary: $('#img_1').attr('src').replace(/^data:image\/(png|jpg);base64,/, "")
+			binary: $(`#img_${ id }`).attr('src').replace(/^data:image\/.+;base64,/, "")
 		};
 
 		$.post("{{ url_for('image_new') }}", data);
+		console.log('id = ', id);
 		console.log(data);
+	}
+
+	$('form').submit(function(e) {
+		/*
+		e.preventDefault();
+
+		for (i=1; i<=no; i++) {
+			console.log('-> i = ', i);
+			setTimeout(post, (i-1)*2000, i);
+		}
+		*/
+		//post()の処理をここに記述する
+		//console.log($('form').serialize());
 	});
 });
 </script>

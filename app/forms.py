@@ -56,7 +56,14 @@ class ImageForm(BaseForm):
 
 
 class RealEstateForm(BaseForm):
+    img_checksums = HiddenField()
     img_ids = HiddenField()
+    img1 = HiddenField()
+    img2 = HiddenField()
+    img3 = HiddenField()
+    img4 = HiddenField()
+    img5 = HiddenField()
+    img6 = HiddenField()
     table_id = HiddenField(default=1) 
     province_id = SelectField('ແຂວງ', coerce=int, validators=[DataRequired()], choices=province_master, default=15) #province_master[15])#, id='select_state')
     district_id = SelectField('ເມືອງ', coerce=int, validators=[DataRequired()], choices=district_master, default=1) #province_master[15])#, id='select_state')

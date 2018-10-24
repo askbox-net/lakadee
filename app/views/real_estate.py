@@ -1,12 +1,14 @@
 # -*- coding:utf-8 -*-
 
 
+import json
 from flask import Flask, redirect, url_for, render_template, request, flash
 from flask_login import login_required, current_user, login_user, logout_user
 from .. models import RealEstate
 from .. forms import RealEstateForm
 from .. baseapp import app
 from .. baseapp import db
+from .. models import Image
 
 from flask import Blueprint
 
@@ -31,12 +33,14 @@ def real_estate_new():
     user_email = current_user.email
     user_phone = current_user.phone
     print('user_id:', current_user.id, user_email, user_phone)
-    form = RealEstateForm(user_id=user_id, email=user_email, phone=user_phone)
+    form = RealEstateForm(id=None, user_id=user_id, email=user_email, phone=user_phone)
     print(vars(form))
 
     if form.validate_on_submit():
         real_estate = RealEstate()
         form.populate_obj(real_estate)
+        real_estate.id = None
+        print(vars(real_estate))
         db.session.add(real_estate)
 
         #print(real_estate.area, real_estate.district_id)
@@ -68,6 +72,21 @@ def real_estate_edit(id):
     if form.validate_on_submit():
         try:
             # Update user
+            """
+            print('form:', vars(form))
+            print('form img_checksums:', vars(form.img_checksums))
+            img_checksums = json.loads(form.img_checksums.data)
+            print('img_checksums: ', img_checksums)
+            imgs = Image.query.filter(Image.checksum.in_(img_checksums)).all()
+            #imgs = Image.query.filter().all()
+            ids = []
+            for o in imgs:
+                ids.append(o.id)
+            form.populate_obj(real_estate)
+            print('ids ---> ')
+            print(json.dumps(ids))
+            real_estate.img_ids = json.dumps(ids)
+            """
             form.populate_obj(real_estate)
             db.session.add(real_estate)
             db.session.commit()
@@ -76,7 +95,7 @@ def real_estate_edit(id):
         except:
             db.session.rollback()
             flash('Error update real estate.', 'danger')
-    return render_template('web/real_estate_new.html', form=form)
+    return render_template('web/real_estate_edit.html', form=form)
 
 
 @app.route("/real_estate/search", methods=('POST',))

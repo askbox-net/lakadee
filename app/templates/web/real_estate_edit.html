@@ -1,10 +1,129 @@
 {% extends 'layouts/master.html' %}
-{% block title %}Edit user{% endblock %}
+{% block title %}ດິນ, ເຮືອນ{% endblock %}
+{% block script %}
+	<script src="{{ url_for('static', filename='js/md5.min.js') }}"></script>
+{% endblock %}
 {% block header %}{% include 'layouts/header_real_estate.html' %}{% endblock %}
 {% block body %}
-<h1>Edit ດິນ, ເຮືອນ, ລົດມືສອງ</h1>
+<h1>ເນື້ອໃນຂອງດິນ, ເຮືອນ</h1>
+<div id="preview">
+</div>
 <form method="post">
+	<div class="sell-upload-figure">
+		<div>
+			<input id="sell-upload-drop-file" name="upload_image" type="file"> <!-- style="display: none;" -->
+			<pre class="visible-pc">ドラッグアンドドロップまたはクリックしてファイルをアップロード</pre>
+			<i class="icon-camera"></i>
+		</div>
+	</div>
+	
 	{{ generate_fields(form) }}
-	<input type="submit" class="btn btn-success" value="Save">
+	<input type="submit" class="btn btn-success" value="Add">
 </form>
+
+<script>
+$(function(){
+	var no = 0;
+	//画像ファイルプレビュー表示のイベント追加 fileを選択時に発火するイベントを登録
+	$('#sell-upload-drop-file').change(function(e) {
+		var file = e.target.files[0],
+		reader = new FileReader(),
+		$preview = $("#preview");
+
+		// 画像ファイル以外の場合は何もしない
+		if(file.type.indexOf("image") < 0){
+			alert("画像ファイルを指定してください。");
+			return false;
+		}
+
+		// ファイル読み込みが完了した際のイベント登録
+		reader.onload = (function(file) {
+			return function(e) {
+				//既存のプレビューを削除
+				//$preview.empty();
+				// .prevewの領域の中にロードした画像を表示するimageタグを追加
+				no++;
+				//<img class="img-fluid img-thumbnail" alt="">
+				//$preview.append(`<img  class="img-fluid img-thumbnail" id="img_${ no }">`);
+				$preview.append(`<div><div class="col-lg-3 col-md-4 col-xs-6"><a href="#" class="d-block mb-4 h-100"><img id="img_${ no }" class="img-fluid img-thumbnail" alt=""></a><div class="sell-upload-button"></div><a href="" class="sell-upload-edit">ແກ້ໄຂ</a><a href="">ລຶບ</a></div>`)
+				//$preview.append($('<img>').attr({
+				$(`#img_${ no }`).attr({
+					src: e.target.result,
+					//width: "150px",
+					//class: "img_preview",
+					title: file.name,
+					type: file.type,
+					size: file.size,
+					checksum: md5(e.target.result)
+				});
+				post(no);
+			};
+		})(file);
+
+		reader.readAsDataURL(file);
+	});
+
+	function post(id) {
+		var data = {
+			user_id: $('#user_id').val(),
+			table_id: $('#table_id').val(),
+			base_id: $('#id').val(),
+			mime: $(`#img_${ id }`).attr('type'),
+			size: $(`#img_${ id }`).attr('size'),
+			checksum: $(`#img_${ id }`).attr('checksum'),
+			//binary: $('#img_1').attr('src').replace(/^data:image\/(png|jpg);base64,/, "")
+			binary: $(`#img_${ id }`).attr('src').replace(/^data:image\/.+;base64,/, "")
+		};
+
+		$.post("{{ url_for('image_new') }}", data);
+		console.log('id = ', id);
+		console.log(data);
+	}
+
+	$('form').submit(function(e) {
+		//e.preventDefault();
+		var img_checksum = new Set();
+		$('.img-thumbnail').each(function(i) { $(`#img${ i+1 }`).val($(this).attr('src')); img_checksum.add($(this).attr('checksum')); });
+
+		console.log(img_checksum);
+		var img_checksum_json = JSON.stringify(Array.from(img_checksum));
+		$('#img_checksums').val(img_checksum_json);
+
+		/*
+		e.preventDefault();
+		for (i=1; i<=no; i++) {
+			console.log('-> i = ', i);
+			setTimeout(post, (i-1)*2000, i);
+		}
+		*/
+		//post()の処理をここに記述する
+		//console.log($('form').serialize());
+	});
+	
+	var img_ids = $('#img_ids').val();
+	console.log(img_ids);
+	//if (img_ids != null && img_ids.length > 0) 
+	{
+		//ids = JSON.parse(img_ids);
+		//console.log(ids);
+
+		$preview = $("#preview");
+
+		for (i = 1; i <= 6; i++) {
+			var base64 = $(`#img${ i }`).val();
+			if (base64 != null && base64.length > 0) {
+				no++;
+				console.log('no = ', no);
+				$preview.append(`<div><div class="col-lg-3 col-md-4 col-xs-6"><a href="#" class="d-block mb-4 h-100"><img id="img_${ no }" src="${base64}" class="img-fluid img-thumbnail" alt=""></a><div class="sell-upload-button"></div><a href="" class="sell-upload-edit">ແກ້ໄຂ</a><a href="">ລຶບ</a></div>`)
+			}
+		}
+		/*
+		ids.forEach(function(i) {
+			$preview.append(`<div><div class="col-lg-3 col-md-4 col-xs-6"><a href="#" class="d-block mb-4 h-100"><img id="img_${ i }" src="/image/102/${ i }" class="img-fluid img-thumbnail" alt=""></a><div class="sell-upload-button"></div><a href="" class="sell-upload-edit">ແກ້ໄຂ</a><a href="">ລຶບ</a></div>`)
+		});
+		*/
+	}
+});
+</script>
 {% endblock %}
+
