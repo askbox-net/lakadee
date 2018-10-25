@@ -88,16 +88,6 @@ $(function(){
 		console.log(img_checksum);
 		var img_checksum_json = JSON.stringify(Array.from(img_checksum));
 		$('#img_checksums').val(img_checksum_json);
-
-		/*
-		e.preventDefault();
-		for (i=1; i<=no; i++) {
-			console.log('-> i = ', i);
-			setTimeout(post, (i-1)*2000, i);
-		}
-		*/
-		//post()の処理をここに記述する
-		//console.log($('form').serialize());
 	});
 	
 	var img_ids = $('#img_ids').val();

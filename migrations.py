@@ -82,18 +82,32 @@ db.create_all()
 # Make 100 fake contacts
 db.session.commit()
 
-first_name = 'admin'
-family_name = 'admin'
-username = 'admin'
-password = 'admin'
-email = 'admin@gmail.com'
-phone = '000-1111-2222'
-authority = 0
+users = [
+        {
+            'first_name' : 'admin',
+            'family_name' : 'admin',
+            'username' : 'admin',
+            'password' : 'admin',
+            'email' : 'admin@gmail.com',
+            'phone' : '000-1111-2222',
+            'authority' : 0,
+        },
+        {
+            'first_name' : 'lakadee',
+            'family_name' : 'lakadee',
+            'username' : 'lakadee',
+            'password' : 'lakadee',
+            'email' : 'lakadee@gmail.com',
+            'phone' : '000-1111-3333',
+            'authority' : 1,
+        },
+]
 
-user = User(authority=authority, first_name=first_name, family_name=family_name, username=username, password=password, email=email, phone=phone)
-user.set_password(password)
-db.session.add(user)
-db.session.commit()
+for o in users:
+    user = User(authority=o['authority'], first_name=o['first_name'], family_name=o['family_name'], username=o['username'], password=o['password'], email=o['email'], phone=o['phone'])
+    user.set_password(o['password'])
+    db.session.add(user)
+    db.session.commit()
 
 
 for obj in tables:
@@ -116,6 +130,7 @@ for obj in districts:
 
 db.session.commit()
 
+"""
 for num in range(100):
     fullname = fake.name().split()
     first_name = fullname[0]
@@ -127,3 +142,4 @@ for num in range(100):
     db.session.add(user)
 
 db.session.commit()
+"""

@@ -14,13 +14,15 @@
 			</li>
 		</ul>
 		<form class="form-inline my-2 my-lg-0" action="{{ url_for('real_estate_search') }}" method="get">
-			<input type="search" name="first_name" class="form-control mr-sm-2" placeholder="ຊອກ..." aria-label="ຊອກ...">
+			<input type="search" name="name" class="form-control mr-sm-2" placeholder="ຊອກ..." aria-label="ຊອກ...">
 			<button type="submit" class="btn btn-outline-success my-2 my-sm-0">ຊອກ</button>
 		</form>
 		<ul class="navbar-nav navbar-right">
 			<li class="nav-item"><a class="nav-link" href="{{ url_for('real_estate_new') }}">New Real Estate</a></li>
 			<li class="nav-item"><a class="nav-link" href="{{ url_for('real_estates') }}">View Real Estate</a></li>
+			<!--
 			<li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
+			//-->
 			<li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
 		</ul>
 	</div><!-- /.navbar-collapse -->

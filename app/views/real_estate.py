@@ -9,6 +9,8 @@ from .. forms import RealEstateForm
 from .. baseapp import app
 from .. baseapp import db
 from .. models import Image
+#from sqlalchemy import or_
+from sqlalchemy import desc
 
 from flask import Blueprint
 
@@ -22,7 +24,7 @@ def real_estates():
     Show alls real estate
     '''
     user_id = current_user.id
-    real_estates = RealEstate.query.filter(RealEstate.user_id==user_id).order_by(RealEstate.id).all()
+    real_estates = RealEstate.query.filter(RealEstate.user_id==user_id).order_by(desc(RealEstate.id)).all()
     return render_template('web/real_estates.html', real_estates=real_estates)
 
 
@@ -49,14 +51,16 @@ def real_estate_new():
             db.session.commit()
             # User info
             flash('real_state created correctly', 'success')
-            return redirect(url_for('real_estate_new'))
+            #return redirect(url_for('real_estate_new'))
+            return redirect(url_for('real_estates'))
         except:
             db.session.rollback()
             flash('Error generating Real State.', 'danger')
 
     #real_estate = RealEstate.query.filter_by(user_id=user_id).first()
     #form = RealEstateForm(obj=real_estate)
-    return render_template('web/real_estate_new.html', form=form)
+    #return render_template('web/real_estate_new.html', form=form)
+    return render_template('web/real_estate_edit.html', form=form)
 
 @app.route('/real_estate/edit/<id>',methods=['GET','POST'])
 @login_required
@@ -92,13 +96,14 @@ def real_estate_edit(id):
             db.session.commit()
             # User info
             flash('Saved successfully', 'success')
+            return redirect(url_for('real_estates'))
         except:
             db.session.rollback()
             flash('Error update real estate.', 'danger')
     return render_template('web/real_estate_edit.html', form=form)
 
 
-@app.route("/real_estate/search", methods=('POST',))
+@app.route("/real_estate/search", methods=('POST', 'GET'))
 @login_required
 def real_estate_search():
     '''
@@ -130,3 +135,4 @@ def real_estate_delete():
         flash('Error delete  user.', 'danger')
 
     return redirect(url_for('real_estates'))
+
