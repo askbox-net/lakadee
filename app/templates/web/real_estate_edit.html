@@ -6,7 +6,12 @@
 {% block header %}{% include 'layouts/header_real_estate.html' %}{% endblock %}
 {% block body %}
 <h1>ເນື້ອໃນຂອງດິນ, ເຮືອນ</h1>
-<div id="preview">
+<!--
+<div id="preview" class="d-flex">
+//-->
+<div class="container-fluid">
+<div id="preview" class="row">
+</div>
 </div>
 <form method="post">
 	<div class="sell-upload-figure">
@@ -24,6 +29,10 @@
 <script>
 $(function(){
 	var no = 0;
+	function preview_img(no, base64) {
+		//return `<div class="col-sm"><div class="col-lg-3 col-md-4 col-xs-6"><a href="#" class="d-block mb-4 h-100"><img id="img_${ no }" src="${base64}" class="img-fluid img-thumbnail" alt=""></a><a href="" class="btn btn-primary">ແກ້ໄຂ</a><a href="" class="btn btn-danger" data-toggle="confirmation" id="a_${no}">ລຶບ</a></div></div>`;
+		return `<div class="col-sm"><img id="img_${ no }" src="${base64}" class="img-fluid img-thumbnail" alt=""><a href="" class="btn btn-primary">ແກ້ໄຂ</a><a href="" class="btn btn-danger" data-toggle="confirmation" id="a_${no}">ລຶບ</a></div>`;
+	}
 	//画像ファイルプレビュー表示のイベント追加 fileを選択時に発火するイベントを登録
 	$('#sell-upload-drop-file').change(function(e) {
 		var file = e.target.files[0],
@@ -43,10 +52,7 @@ $(function(){
 				//$preview.empty();
 				// .prevewの領域の中にロードした画像を表示するimageタグを追加
 				no++;
-				//<img class="img-fluid img-thumbnail" alt="">
-				//$preview.append(`<img  class="img-fluid img-thumbnail" id="img_${ no }">`);
-				$preview.append(`<div><div class="col-lg-3 col-md-4 col-xs-6"><a href="#" class="d-block mb-4 h-100"><img id="img_${ no }" class="img-fluid img-thumbnail" alt=""></a><div class="sell-upload-button"></div><a href="" class="sell-upload-edit">ແກ້ໄຂ</a><a href="">ລຶບ</a></div>`)
-				//$preview.append($('<img>').attr({
+				$preview.append(preview_img(no, ''));
 				$(`#img_${ no }`).attr({
 					src: e.target.result,
 					//width: "150px",
@@ -90,29 +96,28 @@ $(function(){
 		$('#img_checksums').val(img_checksum_json);
 	});
 	
-	var img_ids = $('#img_ids').val();
-	console.log(img_ids);
-	//if (img_ids != null && img_ids.length > 0) 
-	{
-		//ids = JSON.parse(img_ids);
-		//console.log(ids);
 
-		$preview = $("#preview");
+	$preview = $("#preview");
 
-		for (i = 1; i <= 6; i++) {
-			var base64 = $(`#img${ i }`).val();
-			if (base64 != null && base64.length > 0) {
-				no++;
-				console.log('no = ', no);
-				$preview.append(`<div><div class="col-lg-3 col-md-4 col-xs-6"><a href="#" class="d-block mb-4 h-100"><img id="img_${ no }" src="${base64}" class="img-fluid img-thumbnail" alt=""></a><div class="sell-upload-button"></div><a href="" class="sell-upload-edit">ແກ້ໄຂ</a><a href="">ລຶບ</a></div>`)
-			}
+	for (i = 1; i <= 6; i++) {
+		var base64 = $(`#img${ i }`).val();
+		if (base64 != null && base64.length > 0) {
+			no++;
+			console.log('no = ', no);
+			$preview.append(preview_img(i, base64));
 		}
-		/*
-		ids.forEach(function(i) {
-			$preview.append(`<div><div class="col-lg-3 col-md-4 col-xs-6"><a href="#" class="d-block mb-4 h-100"><img id="img_${ i }" src="/image/102/${ i }" class="img-fluid img-thumbnail" alt=""></a><div class="sell-upload-button"></div><a href="" class="sell-upload-edit">ແກ້ໄຂ</a><a href="">ລຶບ</a></div>`)
-		});
-		*/
 	}
+
+
+	$(document).on('click', '.btn-danger', function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		//$(this).parent().find('.img_preview').remove();
+		console.log('id:', $(this).attr('id'));
+		$(this).parent().remove();
+
+		return false;
+	});
 });
 </script>
 {% endblock %}
