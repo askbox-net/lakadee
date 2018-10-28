@@ -5,14 +5,34 @@
 {% endblock %}
 {% block header %}{% include 'layouts/header_real_estate.html' %}{% endblock %}
 {% block body %}
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
 <h1>ເນື້ອໃນຂອງດິນ, ເຮືອນ</h1>
 <!--
 <div id="preview" class="d-flex">
-//-->
 <div class="container-fluid">
 <div id="preview" class="row">
 </div>
 </div>
+<div id="preview" class="features">
+</div>
+//-->
+<div id="map" class="z-depth-1" style="height: 500px">
+</div>
+<div class="row mb-4 wow fadeIn text-center" style="visibility: visible; animation-name: fadeIn;" id="preview">
+</div>
+
 <form method="post">
 	<div class="sell-upload-figure">
 		<div>
@@ -31,7 +51,18 @@ $(function(){
 	var no = 0;
 	function preview_img(no, base64) {
 		//return `<div class="col-sm"><div class="col-lg-3 col-md-4 col-xs-6"><a href="#" class="d-block mb-4 h-100"><img id="img_${ no }" src="${base64}" class="img-fluid img-thumbnail" alt=""></a><a href="" class="btn btn-primary">ແກ້ໄຂ</a><a href="" class="btn btn-danger" data-toggle="confirmation" id="a_${no}">ລຶບ</a></div></div>`;
-		return `<div class="col-sm"><img id="img_${ no }" src="${base64}" class="img-fluid img-thumbnail" alt=""><a href="" class="btn btn-primary">ແກ້ໄຂ</a><a href="" class="btn btn-danger" data-toggle="confirmation" id="a_${no}">ລຶບ</a></div>`;
+		//return `<div class="col-sm"><img id="img_${ no }" src="${base64}" class="img-fluid img-thumbnail" alt=""><a href="" class="btn btn-primary">ແກ້ໄຂ</a><a href="" class="btn btn-danger" data-toggle="confirmation" id="a_${no}">ລຶບ</a></div>`;
+		return `<div class="col-lg-4 col-md-6 mb-4">
+				<div class="card">
+						<img id="img_${ no }" src="${base64}" class="card-img-top">
+					</div>
+					<div class="card-body">
+						<a href="#" class="btn btn-primary btn-md waves-effect waves-light">ແກ້ໄຂ</a>
+						<a href="#" class="btn btn-danger btn-md waves-effect waves-light">ລຶບ</a>
+					</div>
+				</div>
+			</div>
+			`;
 	}
 	//画像ファイルプレビュー表示のイベント追加 fileを選択時に発火するイベントを登録
 	$('#sell-upload-drop-file').change(function(e) {
@@ -89,7 +120,7 @@ $(function(){
 	$('form').submit(function(e) {
 		//e.preventDefault();
 		var img_checksum = new Set();
-		$('.img-thumbnail').each(function(i) { $(`#img${ i+1 }`).val($(this).attr('src')); img_checksum.add($(this).attr('checksum')); });
+		$('.card-img-top').each(function(i) { $(`#img${ i+1 }`).val($(this).attr('src')); img_checksum.add($(this).attr('checksum')); });
 
 		console.log(img_checksum);
 		var img_checksum_json = JSON.stringify(Array.from(img_checksum));
@@ -101,6 +132,7 @@ $(function(){
 
 	for (i = 1; i <= 6; i++) {
 		var base64 = $(`#img${ i }`).val();
+		$(`#img${ i }`).val('');
 		if (base64 != null && base64.length > 0) {
 			no++;
 			console.log('no = ', no);
@@ -114,11 +146,87 @@ $(function(){
 		e.stopPropagation();
 		//$(this).parent().find('.img_preview').remove();
 		console.log('id:', $(this).attr('id'));
-		$(this).parent().remove();
+		$(this).parent().parent().parent().remove();
 
 		return false;
 	});
 });
 </script>
+
+<script>
+	/*
+	var map;
+//https://www.google.com/maps/place/17%C2%B056'59.6%22N+102%C2%B040'03.1%22E/@17.94988,102.6653383,17z/data=!3m1!4b1!4m5!3m4!1s0x0:0x0!8m2!3d17.94988!4d102.667527?hl=en
+//https://www.google.com/maps/place/17%C2%B058'09.4%22N+102%C2%B040'45.3%22E/@17.969275,102.6770463,17z/data=!3m1!4b1!4m5!3m4!1s0x0:0x0!8m2!3d17.969275!4d102.679235?hl=en
+	var center = { lat: 17.94988, lng: 102.6653383 };
+	var center2 = { lat: 17.969275, lng: 102.6770463 };
+	function initMap() {
+		map = new google.maps.Map(document.getElementById('map'), {
+			center: center,
+			zoom: 15
+		});
+
+		marker = new google.maps.Marker({ // マーカーの追加
+			position: center, // マーカーを立てる位置を指定
+			map: map // マーカーを立てる地図を指定
+		});
+		marker2 = new google.maps.Marker({ // マーカーの追加
+			position: center2, // マーカーを立てる位置を指定
+			map: map // マーカーを立てる地図を指定
+		});
+	}
+	*/
+    // 現在地取得処理
+    function initMap() {
+      // Geolocation APIに対応している
+      if (navigator.geolocation) {
+        // 現在地を取得
+        navigator.geolocation.getCurrentPosition(
+          // 取得成功した場合
+          function(position) {
+            // 緯度・経度を変数に格納
+            var mapLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            // マップオプションを変数に格納
+            var mapOptions = {
+              zoom : 15,          // 拡大倍率
+              center : mapLatLng  // 緯度・経度
+            };
+            // マップオブジェクト作成
+            var map = new google.maps.Map(
+              document.getElementById("map"), // マップを表示する要素
+              mapOptions         // マップオプション
+            );
+            //　マップにマーカーを表示する
+            var marker = new google.maps.Marker({
+              map : map,             // 対象の地図オブジェクト
+              position : mapLatLng   // 緯度・経度
+            });
+          },
+          // 取得失敗した場合
+          function(error) {
+            // エラーメッセージを表示
+            switch(error.code) {
+              case 1: // PERMISSION_DENIED
+                alert("位置情報の利用が許可されていません");
+                break;
+              case 2: // POSITION_UNAVAILABLE
+                alert("現在位置が取得できませんでした");
+                break;
+              case 3: // TIMEOUT
+                alert("タイムアウトになりました");
+                break;
+              default:
+                alert("その他のエラー(エラーコード:"+error.code+")");
+                break;
+            }
+          }
+        );
+      // Geolocation APIに対応していない
+      } else {
+        alert("この端末では位置情報が取得できません");
+      }
+    }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDF2K_EUfcl2NQ9cmXg86RhP_AZEv7-PXI&callback=initMap" async defer></script>
 {% endblock %}
 
