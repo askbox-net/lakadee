@@ -176,6 +176,26 @@ $(function(){
 		});
 	}
 	*/
+	function get_geo() {
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(
+          			function(position) {
+
+					console.log(position.coords.latitude, position.coords.longitude);
+				},
+          			function(error) {
+					console.log(error.code);
+				}
+			);
+			console.log("この端末では位置情報が取得できます");
+		} else {
+			console.log("この端末では位置情報が取得できません");
+		}
+
+	}
+
+	get_geo();
+
     // 現在地取得処理
     function initMap() {
       // Geolocation APIに対応している
@@ -226,7 +246,11 @@ $(function(){
         alert("この端末では位置情報が取得できません");
       }
     }
+	//initMap();
     </script>
+    <!--
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDF2K_EUfcl2NQ9cmXg86RhP_AZEv7-PXI&callback=initMap" async defer></script>
+    //-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDF2K_EUfcl2NQ9cmXg86RhP_AZEv7-PXI" async defer></script>
 {% endblock %}
 
